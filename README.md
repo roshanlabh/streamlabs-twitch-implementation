@@ -1,5 +1,5 @@
 ## Demo URL
-    http://rlabh.tk/streamlabs/
+    [http://rlabh.tk/streamlabs/]
     
 ## Usage
     To make this app work properly. You should have
@@ -36,17 +36,19 @@
 > As already mentioned above, this project has very few dependency. So it can be easily deployed with docker or a webserver(apach2/ngnix) and PHP, which can be further automated through any CI/CD tool like Jenkins to automate the build process for deployment.
 And to talk about the architecture, so in AWS context, I will use AWS Auto Scaling service, which ensures the high availablity of the system. By setting Auto scaling policy, it will automatically put new server in place depending on the traffic or load.
 
-  -------------+         +---------------------------+          +--------------+        +------------------------------+
-  | Request(s) | ======> | Application Load Balancer | =======> | Auto Scaling | =====> | Launch Application Server(s) |
-  -------------+         +---------------------------+          +--------------+        +------------------------------+
-  For better image, please go to [http://rlabh.tk/streamlabs/assets/img/streamlabs-proposed-architecture.png]
+    -------------+         +---------------------------+          +--------------+        +------------------------------+
+    | Request(s) | ======> | Application Load Balancer | =======> | Auto Scaling | =====> | Launch Application Server(s) |
+    -------------+         +---------------------------+          +--------------+        +------------------------------+
+    
+    For better image, please go to [http://rlabh.tk/streamlabs/assets/img/streamlabs-proposed-architecture.jpg]
 
 - Where do you see bottlenecks in your proposed architecture and how would you approach scaling this app starting from 100 reqs/day to
    900MM reqs/day over 6 months?
-    This is very subjective one. For me, scaling is a discplined practice, which depends on the cost and time factor.
-    This application is mainly having only two components a web server and PHP for counsuming 3rd party API (in this case Twitch). So our all request go to Twitch API for processing and then it response back with result. Therefore, understanding Twitch limit is also very important. As per Twitch documentation [https://dev.twitch.tv/docs/api/guide/#rate-limits], it allows 800 reqs/min only, which comes to 1152000 (800*60*24) reqs/day. Since our target is of 900 million reqs/day, then in this case either we can use multiple API keys or we can cache the response for some interval to avoid hitting same API again and again.
+    > This is very subjective one. For me, scaling is a discplined practice, which runs in cycle (Load test --> find bottleneck --> fix issues --> repeat).
 
-    Also, to better scale an application, I would first understand the bottlenect area. And then work on it to resolve the same by either adding more power to existing machine (Vertical scaling), adding more servers (Horitzontal scaling)or optimize the existing code.
+    This application is mainly having only two components a web server and PHP for counsuming 3rd party API (in this case Twitch). So our all request go to Twitch API for processing and then it response back with result. Therefore, understanding Twitch limit is also very important. As per Twitch documentation [https://dev.twitch.tv/docs/api/guide/#rate-limits], it allows 800 reqs/min only, which comes to 1152000 (800*60*24) reqs/day. Since our target is of 900 million reqs/day, then in this case either we can use multiple API keys or we can cache the response for some interval to avoid hitting same API again and again for some extent.
+    
+    Also, to better scale an application, I would first understand the bottlenect area. And then work on it to resolve the same by either adding more power to existing machine (Vertical scaling), adding more servers (Horitzontal scaling) or optimize the existing code.
 
 ## References
 * For managing Twitch Apps
